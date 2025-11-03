@@ -1,0 +1,122 @@
+/* Reset and base styles for React app */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+        "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+    height: 100%;
+    min-height: 100vh;
+}
+
+/* TailwindCSS base styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Additional custom styles for the Background Chooser app */
+.bg-gradient-demo {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Smooth transitions for interactive elements */
+.transition-all {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Custom utility classes for the Background Chooser */
+.backdrop-blur-xs {
+    backdrop-filter: blur(2px);
+}
+
+/* Ensure proper layering for React overlays */
+.z-modal {
+    z-index: 9999;
+}
+
+.z-overlay {
+    z-index: 50;
+}
+
+.z-toast {
+    z-index: 999;
+}
+
+/* Museum specific styling */
+.museum-gradient {
+    background: linear-gradient(135deg, #0b1020 0%, #111827 45%, #1f2937 100%);
+}
+
+.aurora-gradient {
+    background: linear-gradient(120deg, #0ea5e9, #22d3ee, #a78bfa);
+}
+
+.sunset-gradient {
+    background: radial-gradient(
+        120% 100% at 10% 0%,
+        #ffedd5 0%,
+        #fb7185 40%,
+        #1f2937 100%
+    );
+}
+
+/* Animation utilities */
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

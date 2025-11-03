@@ -1,0 +1,31 @@
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+:root{
+  --bg:#0a0a0b; --fg:#e6e6e8; --muted:#a9abb3;
+  --card:#121216; --accent:#7ae3ff; --accent2:#7cffb8;
+  --border:#23232a; --brand:#ffffff;
+}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,'Noto Sans',sans-serif}
+.container{width:min(1100px,92vw);margin:0 auto}
+.site-header{border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,11,.75);backdrop-filter:saturate(140%) blur(10px);z-index:10}
+.site-header .container{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.brand{font-weight:700;font-size:18px;margin:0;color:var(--brand);letter-spacing:.3px}
+.nav a{color:var(--fg);text-decoration:none;margin-left:18px;font-size:14px;opacity:.85}
+.nav a:hover{opacity:1}
+.hero{padding:48px 0}
+.hero .container{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center}
+@media (max-width:900px){.hero .container{grid-template-columns:1fr}}
+.hero-media{background:linear-gradient(180deg,#0d0d12,transparent);border:1px solid var(--border);border-radius:16px;padding:14px}
+video{width:100%;height:auto;border-radius:10px;display:block;background:#000}
+.scrubber{margin-top:10px}
+.scrubber input[type=range]{width:100%}
+.timecode{display:flex;justify-content:space-between;font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px;margin-top:6px}
+.hero-copy h2{margin:0 0 8px 0;font-size:28px;line-height:1.2}
+.hero-copy p{margin:0 0 16px 0;color:var(--muted)}
+.cta-row{display:flex;gap:12px}
+.btn{display:inline-block;border:1px solid var(--border);padding:10px 14px;border-radius:10px;color:var(--fg);text-decoration:none}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#000;font-weight:700;border:none}
+.grid{padding:32px 0 64px 0}
+.grid .container{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:900px){.grid .container{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
+.site-footer{border-top:1px solid var(--border);padding:20px 0;color:var(--muted);font-size:14px}

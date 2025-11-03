@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Museum of Artificial Intelligence</title>
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="description" content="Museum of Artificial Intelligence — Front page hero with scrub-controlled video." />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1 class="brand">The Museum of Artificial Intelligence</h1>
+        <nav class="nav">
+          <a href="#" aria-label="Exhibitions">Exhibitions</a>
+          <a href="#" aria-label="Events">Events</a>
+          <a href="#" aria-label="About">About</a>
+          <a href="#" aria-label="Visit">Visit</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <div class="hero-media">
+            <!-- The video is never auto-played. Controls are hidden. Slider controls currentTime. -->
+            <video id="heroVideo" preload="metadata" playsinline muted></video>
+            <div class="scrubber">
+              <input id="timeSlider" type="range" min="0" max="1000" value="0" step="1" aria-label="Scrub video timeline" />
+              <div class="timecode">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-copy">
+            <h2>Intelligence, engineered and imagined</h2>
+            <p>Explore history, systems, and futures of AI. This front page features a scrub-controlled hero video. It never plays automatically.</p>
+            <div class="cta-row">
+              <a class="btn primary" href="#">Plan your visit</a>
+              <a class="btn" href="#">Become a member</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="container">
+          <article class="card">
+            <h3>Current exhibitions</h3>
+            <p>Symbolic vs connectionist AI, learning machines, and robotics.</p>
+          </article>
+          <article class="card">
+            <h3>Workshops</h3>
+            <p>Hands-on sessions for students, artists, and engineers.</p>
+          </article>
+          <article class="card">
+            <h3>Collections</h3>
+            <p>Artifacts, diagrams, and interactive media from AI history.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year"></span> Museum of Artificial Intelligence</p>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
