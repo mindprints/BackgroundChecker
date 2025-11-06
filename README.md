@@ -1,264 +1,93 @@
 # Museum of Artificial Intelligence - Background Checker
 
-A comprehensive tool for testing background images, card layouts, and responsive design for the Museum of Artificial Intelligence exhibition platform. This application allows you to experiment with different backgrounds, generate dynamic content, test mobile responsiveness, and optimize visual readability.
+A comprehensive tool for testing and previewing background images, dynamic card layouts, and responsive design for the Museum of Artificial Intelligence web platform. This application provides a flexible environment to experiment with different backgrounds, generate dynamic content, and simulate various device viewports on a single, responsive page.
 
-## 🌟 Features
+## ✨ Key Features
 
-### Background Management
-- **Preset Backgrounds**: 10+ curated AI-themed gradient backgrounds
-- **Image Upload**: Drag & drop or browse to upload custom images (AVIF, WebP, JPG, PNG, GIF, BMP, SVG)
+### UI & Layout
+- **Collapsible Sidebar**: All controls are neatly organized in a sidebar that can be expanded (300px) for full access or collapsed (64px) to icons for a clean view.
+- **Responsive Main Page**: The application itself is a fully responsive page.
+- **Embedded Device Canvas**: Device previews are rendered proportionally within a centered canvas, not by resizing the entire browser viewport.
+
+### Background Customization
+- **Preset Backgrounds**: A collection of curated, AI-themed gradient backgrounds.
+- **Image Upload**: Drag-and-drop or browse to upload custom images (`AVIF`, `WebP`, `JPG`, `PNG`, etc.).
 - **Background Controls**:
-  - Fit modes: cover, contain, auto
-  - Position selector: 9 positioning options
-  - Repeat toggle for background patterns
-  - Overlay darkness control (0-95%)
-  - Blur effect (0-12px)
+    - **Fit**: `cover`, `contain`, `auto`.
+    - **Position**: 9 alignment options.
+    - **Repeat**: Toggle for background tiling.
+    - **Overlay**: Adjust darkness overlay (0-95%) for text readability.
+    - **Blur**: Add a blur effect to the background (0-12px).
 
 ### Dynamic Card System
-- **AI-Themed Card Generation**: Generate 1-12 cards with relevant AI content
-- **Custom Color Picker**: Universal card background color customization
-- **Smart Text Selection**: Automatic white/black text selection for optimal contrast
-- **Card Opacity**: Dynamic transparency with linked blur effects
-- **Responsive Layout**: Auto-fit grid that adapts to screen size
+- **AI-Themed Card Generation**: Instantly generate 1-12 cards with relevant AI-related titles and content.
+- **Custom Color Picker**: A universal color picker to set the background color for all generated cards.
+- **Smart Text Contrast**: Text color (white or black) is automatically chosen to ensure optimal contrast against the selected card color and opacity.
+- **Card Opacity**: A slider to control the transparency of the cards, which is linked to a subtle backdrop-blur effect.
 
-### Device Testing
-- **Multiple Viewport Sizes**:
-  - Fluid (100% responsive)
-  - Mobile Portrait (390×844)
-  - Mobile Landscape (844×390)
-  - Tablet (820×1180)
-  - Desktop (1440×900)
-- **Rotation Support**: Mobile and tablet viewports can be rotated
-- **Automatic Layout**: Single column on mobile, multi-column on larger screens
+### Device & Responsiveness Testing
+- **Device Simulation**: Preview your design on various device sizes without resizing your browser.
+- **Multiple Viewports**: `Fluid` (responsive), `Mobile`, `Tablet`, and `Desktop`.
+- **Rotation**: The `Rotate` button swaps the height and width for `Mobile` and `Tablet` viewports to simulate orientation changes.
 
-### Visual Enhancement
-- **Dark/Light Mode**: Toggle between dark and light interface themes
-- **Contrast Meter**: WCAG AA/AAA compliance checking for text readability
-- **Backdrop Effects**: Optional blur and transparency effects
-- **CSS Export**: Generate production-ready CSS snippets
-
-### Export Capabilities
-- **CSS Snippets**: Copy background CSS with one click
-- **JSON Configuration**: Export complete state configuration
-- **PNG Export**: Generate high-quality preview images
-- **Local Storage**: Automatic state persistence across sessions
-
-## 🎮 How to Use
-
-### Getting Started
-1. **Open the application** in your web browser
-2. **Upload background images** via drag & drop or the "Upload" button
-3. **Select from presets** using the thumbnail chooser at the bottom
-4. **Generate cards** using the "Cards" control and "Random" button
-
-### Background Controls
-- **Fit**: Choose how background images scale (cover, contain, or auto)
-- **Position**: Set background alignment (9 positions available)
-- **Repeat**: Enable background pattern repetition
-- **Overlay**: Adjust darkness overlay (0-95%) for text readability
-- **Blur**: Add blur effect to background (0-12px)
-
-### Card Customization
-- **Color Picker**: Click the color square to choose card background color
-- **Card Count**: Set number of cards to generate (1-12)
-- **Random**: Generate new AI-themed cards with random content
-- **Opacity**: Adjust card transparency (0-100%)
-
-### Device Testing
-- **Device Selector**: Choose viewport size for testing
-- **Rotation**: Rotate mobile/tablet viewports for orientation testing
-- **Responsive Grid**: Automatically adapts card layout to screen size
+### Utilities & Exporting
+- **Contrast Meter**: A handy WCAG 2.1 contrast checker for page and card text readability.
+- **Help Overlay**: A quick reference for keyboard shortcuts.
+- **State Persistence**: Your entire session (backgrounds, settings, cards) is automatically saved to `localStorage`.
+- **Exporting**:
+    - **Copy CSS**: Get a production-ready CSS snippet for the current background.
+    - **Export JSON**: Save the entire application state to a JSON file.
+    - **Export PNG**: Download a PNG screenshot of the current device canvas.
 
 ## ⌨️ Keyboard Shortcuts
 
-| Key | Action |
-|-----|--------|
-| `←/→` | Previous/next background |
-| `1-9` | Select thumbnail by number |
-| `F` | Favorite current background |
-| `C` | Toggle A/B compare mode |
-| `H` | Hide/show header and thumbnails |
-| `U` | Toggle header visibility |
-| `T` | Toggle thumbnail visibility |
-| `Y` | Copy CSS snippet to clipboard |
-| `J` | Export JSON configuration |
-| `P` | Export PNG preview |
-| `M` | Toggle contrast meter |
-| `D` | Toggle dark mode |
-| `S` | Save current state to localStorage |
-| `?` or `/` | Show/hide help |
-
-## 🎨 Card Generation
-
-The card generation system creates AI-themed content with relevant titles and descriptions:
-
-### Sample Card Titles
-- AI Revolution
-- Neural Networks
-- Machine Learning
-- Deep Learning
-- Computer Vision
-- Natural Language Processing
-- Robotics
-- Automation
-- Data Science
-- Predictive Analytics
-- Pattern Recognition
-- Algorithm Design
-- Quantum Computing
-- Edge Computing
-- Cloud AI
-- AI Ethics
-- Autonomous Systems
-- Smart Cities
-- Digital Transformation
-- Tech Innovation
-- Future of Work
-- Human-AI Collaboration
-- AI Safety
-- Machine Consciousness
-
-### Generated Content
-Each card includes descriptive content about AI topics, providing realistic layout testing scenarios for the Museum of Artificial Intelligence exhibition.
-
-## 📱 Mobile Responsiveness
-
-The application automatically adapts to mobile devices:
-- **Single Column Layout**: Cards stack vertically on mobile screens
-- **Touch-Friendly Controls**: All buttons and inputs work on touch devices
-- **Responsive Grid**: Auto-fit CSS grid ensures proper spacing
-- **Mobile Device Testing**: Dedicated mobile portrait and landscape options
+| Key         | Action                        |
+|-------------|-------------------------------|
+| `←`/`→`     | Previous/Next Background      |
+| `1-9`       | Select a Visible Thumbnail    |
+| `F`         | Favorite/Unfavorite Background|
+| `C`         | Toggle A/B Compare Mode       |
+| `Y`         | Copy CSS Snippet              |
+| `J`         | Export JSON State             |
+| `P`         | Export Canvas as PNG          |
+| `M`         | Toggle Contrast Meter Overlay |
+| `S`         | Force Save State to LocalStorage|
+| `?`         | Toggle Help Overlay           |
 
 ## 🔧 Technical Details
 
-### Built With
+### Stack
 - **React 18** with TypeScript
-- **Vite** for fast development and building
+- **Vite** for a blazing-fast development experience
 - **Tailwind CSS** for utility-first styling
-- **HTML5 Canvas** for PNG export functionality
-- **Local Storage** for state persistence
 
 ### Architecture
-- **Component-Based**: Modular React components for maintainability
-- **Type Safety**: Full TypeScript implementation
-- **State Management**: React hooks with localStorage integration
-- **Responsive Design**: Mobile-first approach with Tailwind utilities
+- **Single-File Component**: The entire application is encapsulated within the `BackgroundChooser.tsx` component.
+- **State Management**: State is managed using React Hooks (`useState`, `useEffect`, `useMemo`) with persistence via the `localStorage` API.
+- **Responsive Design**: The primary layout uses Flexbox, and the dynamic card grid uses CSS Grid's `auto-fit` and `minmax` properties to be container-aware, ensuring it responds correctly within the simulated device canvas.
 
-### File Structure
-```
-BackgroundChecker/
-├── src/
-│   ├── BackgroundChooser.tsx    # Main application component
-│   ├── main.jsx                 # Application entry point
-│   └── index.css                # Global styles
-├── public/                      # Static assets
-├── package.json                 # Dependencies and scripts
-├── tailwind.config.js          # Tailwind configuration
-├── vite.config.js              # Vite configuration
-└── README.md                   # This file
-```
-
-## 🚀 Development
+## 🚀 Development Setup
 
 ### Prerequisites
-- Node.js 16+ 
+- Node.js (v16 or newer)
 - npm or yarn
 
-### Setup
+### Installation & Running
 ```bash
-# Clone the repository
-git clone <repository-url>
+# 1. Clone the repository
+git clone <your-repository-url>
 cd BackgroundChecker
 
-# Install dependencies
+# 2. Install dependencies
 npm install
 
-# Start development server
+# 3. Start the development server
 npm run dev
+# The application will be available at http://localhost:5173 (or another port)
 
-# Build for production
+# 4. To build for production
 npm run build
 
-# Preview production build
+# 5. To preview the production build
 npm run preview
 ```
-
-### Customization
-- **Presets**: Modify the `PRESETS` array in `BackgroundChooser.tsx` to change default backgrounds
-- **Card Content**: Update `cardTitles` and `cardContents` arrays in `generateRandomCards()` function
-- **Device Sizes**: Modify the `DEVICES` array to add or change viewport options
-- **Styling**: Customize Tailwind classes or modify `tailwind.config.js`
-
-## 🎯 Use Cases
-
-- **UI/UX Designers**: Test card layouts and background combinations
-- **Web Developers**: Validate responsive design and accessibility
-- **Museum Curators**: Preview background options for exhibition displays
-- **Content Creators**: Generate AI-themed content for testing layouts
-- **Accessibility Auditors**: Use contrast meter for WCAG compliance
-
-## 🔄 State Management
-
-The application automatically saves and restores:
-- Selected background and settings
-- Generated card content
-- Custom color choices
-- Device viewport preferences
-- UI preferences (dark mode, hidden elements)
-
-## 📊 Export Formats
-
-### CSS Export
-```css
-/* Background */
-.selector {
-  background-image: url('path/to/image.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  position: relative;
-}
-
-/* Overlay */
-.selector::before {
-  content: ""; position: absolute; inset: 0;
-  background: rgba(0,0,0,0.35);
-  pointer-events: none;
-}
-```
-
-### JSON Export
-```json
-{
-  "items": [...],
-  "index": 0,
-  "fit": "cover",
-  "repeat": false,
-  "pos": "center center",
-  "overlay": 0.35,
-  "blur": 0,
-  "device": "fluid",
-  "rotate": false,
-  "cardOpacity": 0.08,
-  "darkMode": false,
-  "cardColor": "#000000",
-  "cardCount": 6,
-  "generatedCards": [...]
-}
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly across different devices
-5. Submit a pull request
-
-## 📄 License
-
-This project is part of the Museum of Artificial Intelligence exhibition platform.
-
----
-
-**Museum of Artificial Intelligence** - Exhibition platform for the history and future of computation. Prototype layout to evaluate background imagery, readability, and motion.
