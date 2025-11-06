@@ -1311,7 +1311,7 @@ export default function MAI_Background_Chooser_Demo() {
               </div>
             </section>
 
-            <section className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <section className="@container max-w-7xl mx-auto px-6 grid grid-cols-1 @md:grid-cols-2 @lg:grid-cols-3 gap-6">
               {generatedCards.map((card) => (
                 <article
                   key={card.id}
