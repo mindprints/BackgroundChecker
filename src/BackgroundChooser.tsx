@@ -37,6 +37,9 @@ type ExportState = {
   rotate: boolean;
   cardOpacity: number;
   darkMode: boolean;
+  cardColor: string;
+  cardCount: number;
+  generatedCards: Array<{ id: string; title: string; content: string }>;
 };
 
 function uid() {
@@ -107,12 +110,23 @@ const POSITIONS = [
 
 const DEVICES = [
   { key: "fluid", label: "Fluid 100%", w: "100%", h: "100%" },
-  { key: "mobile", label: "Mobile 390×844", w: 390, h: 844 },
+  { key: "mobile-portrait", label: "Mobile Portrait 390×844", w: 390, h: 844 },
+  {
+    key: "mobile-landscape",
+    label: "Mobile Landscape 844×390",
+    w: 844,
+    h: 390,
+  },
   { key: "tablet", label: "Tablet 820×1180", w: 820, h: 1180 },
   { key: "desktop", label: "Desktop 1440×900", w: 1440, h: 900 },
 ] as const;
 
-type DeviceKey = "fluid" | "mobile" | "tablet" | "desktop";
+type DeviceKey =
+  | "fluid"
+  | "mobile-portrait"
+  | "mobile-landscape"
+  | "tablet"
+  | "desktop";
 
 const LS_KEY = "mai-bg-chooser-v1";
 
@@ -222,14 +236,29 @@ function estimateMinContrastFromOverlay(overlay: number) {
 function chooseTextColorForCard(
   overlay: number,
   cardOpacity: number,
-  darkMode: boolean = false,
+  cardColor: string = "#000000",
 ) {
   const a = Math.max(0, Math.min(1, cardOpacity));
   const L_under_max = 1 - Math.max(0, Math.min(0.95, overlay));
-  // Composite white (1.0) or black (0.0) over L_under_max based on dark mode
-  const L_card = darkMode
-    ? (1 - a) * L_under_max // black card: luminance comes only from background
-    : a * 1 + (1 - a) * L_under_max; // white card: composite over background
+
+  // Convert hex color to RGB and calculate luminance
+  const hexToRgb = (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : { r: 0, g: 0, b: 0 }; // default to black
+  };
+
+  const rgb = hexToRgb(cardColor);
+  const cardLuminance = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255;
+
+  // Composite custom color over L_under_max
+  const L_card = a * cardLuminance + (1 - a) * L_under_max;
+
   // Contrast vs white and black text
   const ratioWhite = (1 + 0.05) / (L_card + 0.05);
   const ratioBlack = (L_card + 0.05) / 0.05;
@@ -243,9 +272,9 @@ function chooseTextColorForCard(
 function estimateCardContrast(
   overlay: number,
   cardOpacity: number,
-  darkMode: boolean = false,
+  cardColor: string = "#000000",
 ) {
-  return chooseTextColorForCard(overlay, cardOpacity, darkMode);
+  return chooseTextColorForCard(overlay, cardOpacity, cardColor);
 }
 
 // Draw to canvas for PNG export (background + overlay, optional compare)
@@ -479,6 +508,65 @@ function loadImage(src: string) {
   });
 }
 
+// Random card generation function
+function generateRandomCards(count: number) {
+  const cardTitles = [
+    "AI Revolution",
+    "Neural Networks",
+    "Machine Learning",
+    "Deep Learning",
+    "Computer Vision",
+    "Natural Language",
+    "Robotics",
+    "Automation",
+    "Data Science",
+    "Predictive Analytics",
+    "Pattern Recognition",
+    "Algorithm Design",
+    "Quantum Computing",
+    "Edge Computing",
+    "Cloud AI",
+    "AI Ethics",
+    "Autonomous Systems",
+    "Smart Cities",
+    "Digital Transformation",
+    "Tech Innovation",
+    "Future of Work",
+    "Human-AI Collaboration",
+    "AI Safety",
+    "Machine Consciousness",
+  ];
+
+  const cardContents = [
+    "Explore cutting-edge developments in artificial intelligence and their impact on society.",
+    "Discover how machine learning algorithms are transforming industries worldwide.",
+    "Learn about the latest breakthroughs in neural network architectures and training methods.",
+    "Understand the principles behind deep learning and its applications in real-world scenarios.",
+    "Investigate computer vision techniques that enable machines to interpret visual information.",
+    "Dive into natural language processing and how AI understands human communication.",
+    "Examine the intersection of robotics and AI in creating intelligent autonomous systems.",
+    "Analyze the role of automation in reshaping the future of work and productivity.",
+    "Explore data science methodologies that drive insights and decision-making processes.",
+    "Understand how predictive analytics is revolutionizing business strategy and planning.",
+  ];
+
+  const cards = [];
+  for (let i = 0; i < count; i++) {
+    const titleIndex = Math.floor(Math.random() * cardTitles.length);
+    const contentIndex = Math.floor(Math.random() * cardContents.length);
+    const title = cardTitles[titleIndex];
+    const content = cardContents[contentIndex];
+
+    cards.push({
+      id: uid(),
+      title,
+      content,
+    });
+  }
+
+  return cards;
+}
+
 export default function MAI_Background_Chooser_Demo() {
   // State (attempt load from localStorage)
   const [items, setItems] = useState<BGItem[]>(() => {
@@ -547,7 +635,12 @@ export default function MAI_Background_Chooser_Demo() {
   const [device, setDevice] = useState<DeviceKey>(() => {
     try {
       const p = JSON.parse(localStorage.getItem(LS_KEY) || "{}") as ExportState;
-      return (p.device || "fluid") as DeviceKey;
+      // Handle migration from old "mobile" key to "mobile-portrait"
+      let deviceKey = p.device;
+      if (deviceKey === "mobile") {
+        deviceKey = "mobile-portrait";
+      }
+      return (deviceKey || "fluid") as DeviceKey;
     } catch {
       return "fluid";
     }
@@ -582,6 +675,18 @@ export default function MAI_Background_Chooser_Demo() {
       return false;
     }
   });
+  const [cardColor, setCardColor] = useState<string>(() => {
+    try {
+      const p = JSON.parse(localStorage.getItem(LS_KEY) || "{}") as ExportState;
+      return p.cardColor || (p.darkMode ? "#000000" : "#ffffff");
+    } catch {
+      return "#000000";
+    }
+  });
+  const [cardCount, setCardCount] = useState<number>(3);
+  const [generatedCards, setGeneratedCards] = useState<
+    Array<{ id: string; title: string; content: string }>
+  >(() => generateRandomCards(6));
 
   const [helpOpen, setHelpOpen] = useState(false);
   const [meterOpen, setMeterOpen] = useState(false);
@@ -604,6 +709,9 @@ export default function MAI_Background_Chooser_Demo() {
       rotate,
       cardOpacity,
       darkMode,
+      cardColor,
+      cardCount,
+      generatedCards,
     };
     const id = setTimeout(() => {
       try {
@@ -623,6 +731,9 @@ export default function MAI_Background_Chooser_Demo() {
     rotate,
     cardOpacity,
     darkMode,
+    cardColor,
+    cardCount,
+    generatedCards,
   ]);
 
   // Keyboard shortcuts
@@ -718,7 +829,7 @@ export default function MAI_Background_Chooser_Demo() {
         setIndex((i) => (i - 1 + items.length) % items.length);
       if (k === "f" && cur) toggleFavorite(cur.id);
       if (k === "c" && hasItems) setShowB((s) => !s);
-      if (k === "d") setDarkMode((dm) => !dm);
+
       const num = parseInt(e.key, 10);
       if (hasItems && !Number.isNaN(num) && num >= 1 && num <= 9) {
         const pool = visibleThumbnails();
@@ -842,21 +953,36 @@ export default function MAI_Background_Chooser_Demo() {
       ),
     [cardOpacity],
   );
+  // Convert hex color to RGB
+  const hexToRgb = (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : null;
+  };
+
+  const rgb = hexToRgb(cardColor);
+  const cardBgColor = rgb
+    ? `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${cardOpacity})`
+    : `rgba(0, 0, 0, ${cardOpacity})`;
+
   const cardPanelStyle: React.CSSProperties = useMemo(
     () => ({
-      backgroundColor: darkMode
-        ? `rgba(0,0,0,${cardOpacity})`
-        : `rgba(255,255,255,${cardOpacity})`,
+      backgroundColor: cardBgColor,
       backdropFilter: cardBlur ? `blur(${cardBlur}px)` : undefined,
       WebkitBackdropFilter: cardBlur ? `blur(${cardBlur}px)` : undefined,
     }),
-    [cardOpacity, cardBlur, darkMode],
+    [cardBgColor, cardBlur],
   );
 
-  // Decide text color for cards (white/black) based on overlay + card opacity + dark mode
+  // Decide text color for cards (white/black) based on overlay + card opacity + card color
   const cardTextChoice = useMemo(
-    () => chooseTextColorForCard(overlay, cardOpacity, darkMode),
-    [overlay, cardOpacity, darkMode],
+    () => chooseTextColorForCard(overlay, cardOpacity, cardColor),
+    [overlay, cardOpacity, cardColor],
   );
   const cardTextColor = cardTextChoice.color; // 'white' | 'black'
   const cardTextClass =
@@ -899,8 +1025,8 @@ export default function MAI_Background_Chooser_Demo() {
     [overlay],
   );
   const contrastCard = useMemo(
-    () => estimateCardContrast(overlay, cardOpacity, darkMode),
-    [overlay, cardOpacity, darkMode],
+    () => estimateCardContrast(overlay, cardOpacity, cardColor),
+    [overlay, cardOpacity, cardColor],
   );
 
   return (
@@ -979,14 +1105,35 @@ export default function MAI_Background_Chooser_Demo() {
               />
               <span className="opacity-80">Repeat</span>
             </label>
-            <label className="flex items-center gap-2 text-sm">
+            <div className="flex items-center gap-2 text-sm">
+              <label className="opacity-80">Card Color</label>
               <input
-                type="checkbox"
-                checked={darkMode}
-                onChange={(e) => setDarkMode(e.target.checked)}
+                type="color"
+                value={cardColor}
+                onChange={(e) => setCardColor(e.target.value)}
+                className="w-8 h-8 rounded border border-white/20 bg-transparent cursor-pointer"
               />
-              <span className="opacity-80">Dark Cards</span>
-            </label>
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <label className="opacity-80">Cards</label>
+              <input
+                type="number"
+                min="1"
+                max="12"
+                value={cardCount}
+                onChange={(e) => setCardCount(parseInt(e.target.value) || 3)}
+                className="w-16 bg-white/10 rounded px-2 py-1 outline-none"
+              />
+              <button
+                onClick={() =>
+                  setGeneratedCards(generateRandomCards(cardCount))
+                }
+                className="px-3 py-1 rounded-md bg-white/10 hover:bg-white/20"
+              >
+                Random
+              </button>
+            </div>
+
             <div className="flex items-center gap-2 text-sm">
               <label className="opacity-80">Overlay</label>
               <input
@@ -1272,29 +1419,35 @@ export default function MAI_Background_Chooser_Demo() {
             </div>
           </section>
 
-          <section className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-6">
-            {["Current Exhibition", "Upcoming", "Collections"].map((t) => (
-              <article
-                key={t}
-                className="rounded-2xl border border-white/10 p-5 hover:bg-white/10 transition"
-                style={cardPanelStyle}
-              >
-                <h3 className={"text-xl font-semibold " + cardHeadingClass}>
-                  {t}
-                </h3>
-                <p className={"mt-2 text-sm " + cardTextClass}>
-                  Placeholder content for layout testing. Adjust overlay and the
-                  Cards opacity slider to validate contrast.
-                </p>
-                <button
-                  className={
-                    "mt-4 text-sm px-4 py-2 rounded-md " + cardButtonClass
-                  }
+          <section className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+            {generatedCards.length > 0 ? (
+              generatedCards.map((card) => (
+                <article
+                  key={card.id}
+                  className="rounded-2xl border border-white/10 p-5 hover:bg-white/10 transition"
+                  style={cardPanelStyle}
                 >
-                  Open
-                </button>
-              </article>
-            ))}
+                  <h3 className={"text-xl font-semibold " + cardHeadingClass}>
+                    {card.title}
+                  </h3>
+                  <p className={"mt-2 text-sm " + cardTextClass}>
+                    {card.content}
+                  </p>
+                  <button
+                    className={
+                      "mt-4 text-sm px-4 py-2 rounded-md " + cardButtonClass
+                    }
+                  >
+                    Open
+                  </button>
+                </article>
+              ))
+            ) : (
+              <div className="col-span-full text-center text-white/60 py-8">
+                No cards generated. Use the "Random" button above to generate
+                cards.
+              </div>
+            )}
           </section>
 
           <section className="max-w-7xl mx-auto px-6 py-12">
